@@ -1,3 +1,5 @@
+import { createRequire } from 'module'; const require = createRequire(import.meta.url);
+
 // src/server/serverless.ts
 import express from "express";
 
