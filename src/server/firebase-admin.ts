@@ -34,13 +34,18 @@ if (!serviceAccount) {
   }
 }
 
-// Initialize Firebase Admin (only once)
-if (getApps().length === 0) {
-  initializeApp({
-    credential: cert(serviceAccount),
-  });
+// Initialize Firebase Admin (only if serviceAccount is available)
+if (getApps().length === 0 && serviceAccount) {
+  try {
+    initializeApp({
+      credential: cert(serviceAccount),
+    });
+  } catch (err) {
+    console.error('❌ Failed to initialize Firebase Admin app:', err);
+  }
 }
 
-// Export auth and firestore instances
-export const adminAuth = getAuth();
-export const db = getFirestore();
+// Export auth and firestore instances (or null if not configured)
+export const adminAuth = getApps().length > 0 ? getAuth() : null;
+export const db = getApps().length > 0 ? getFirestore() : null;
+

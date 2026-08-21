@@ -22,6 +22,13 @@ declare global {
  * Usage: router.get('/admin/stats', requireAdmin, handler);
  */
 export async function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!adminAuth || !db) {
+    return res.status(500).json({
+      error: 'Server Configuration Error',
+      message: 'Firebase Admin SDK is not initialized. Please configure FIREBASE_SERVICE_ACCOUNT environment variable.',
+    });
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {

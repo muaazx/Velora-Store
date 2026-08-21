@@ -89,6 +89,13 @@ apiRouter.post('/auth/reset-password', (req: Request, res: Response) => {
 // ==================== ADMIN LOGIN (Firebase Google Sign-In) ====================
 apiRouter.post('/auth/admin-login', async (req: Request, res: Response) => {
   try {
+    if (!adminAuth || !db) {
+      return res.status(500).json({
+        error: 'Server Configuration Error',
+        message: 'Firebase Admin SDK is not initialized. Please configure FIREBASE_SERVICE_ACCOUNT environment variable.',
+      });
+    }
+
     const { idToken } = req.body;
     if (!idToken) {
       return res.status(400).json({ error: 'Firebase ID token is required' });
