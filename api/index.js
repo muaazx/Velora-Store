@@ -1869,6 +1869,9 @@ if (!serviceAccount) {
     console.warn("\u26A0\uFE0F Firebase service account file not available (expected in serverless):", err.message);
   }
 }
+if (serviceAccount && serviceAccount.private_key) {
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
+}
 if (getApps().length === 0 && serviceAccount) {
   try {
     initializeApp({

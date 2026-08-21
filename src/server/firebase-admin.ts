@@ -40,6 +40,11 @@ if (!serviceAccount) {
   }
 }
 
+// Ensure private key handles escaped newline strings correctly (\n -> actual newline)
+if (serviceAccount && serviceAccount.private_key) {
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+}
+
 // Initialize Firebase Admin (only if serviceAccount is available)
 if (getApps().length === 0 && serviceAccount) {
   try {
