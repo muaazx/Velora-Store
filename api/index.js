@@ -1,4 +1,4 @@
-// api/index.ts
+// src/server/serverless.ts
 import express from "express";
 
 // src/server/routes/api.ts
@@ -2395,7 +2395,7 @@ apiRouter.delete("/admin/customers/:id", requireAdmin, (req, res) => {
   return res.json({ success: true });
 });
 
-// api/index.ts
+// src/server/serverless.ts
 var app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -2418,7 +2418,7 @@ app.use((err, _req, res, _next) => {
   console.error("API Error:", err);
   res.status(500).json({ error: err?.message || "Internal Server Error" });
 });
-var index_default = app;
+var serverless_default = app;
 export {
-  index_default as default
+  serverless_default as default
 };

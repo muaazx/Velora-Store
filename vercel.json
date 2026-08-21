@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate && vite build && esbuild api/index.ts --bundle --platform=node --format=esm --packages=external --outfile=api/index.js",
+  "buildCommand": "prisma generate && vite build && esbuild src/server/serverless.ts --bundle --platform=node --format=esm --packages=external --outfile=api/index.js",
   "outputDirectory": "dist",
   "rewrites": [
     {
