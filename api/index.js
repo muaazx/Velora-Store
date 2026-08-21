@@ -1013,6 +1013,7 @@ var INITIAL_NOTIFICATIONS = [
 import fs from "fs";
 import path from "path";
 var DB_FILE = path.resolve(process.cwd(), "db_storage.json");
+var DB_FILE_TMP = path.resolve("/tmp", "db_storage.json");
 var DataStore = class {
   constructor() {
     this.products = [...INITIAL_PRODUCTS];
@@ -1059,15 +1060,24 @@ var DataStore = class {
         settings: this.settings,
         notifications: this.notifications
       };
-      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+      } catch {
+        fs.writeFileSync(DB_FILE_TMP, JSON.stringify(data, null, 2), "utf-8");
+      }
     } catch (err) {
-      console.error("Failed to save DB to disk:", err);
+      console.warn("DB disk persistence unavailable (expected in serverless):", err.message);
     }
   }
   loadFromDisk() {
     try {
+      let raw = null;
       if (fs.existsSync(DB_FILE)) {
-        const raw = fs.readFileSync(DB_FILE, "utf-8");
+        raw = fs.readFileSync(DB_FILE, "utf-8");
+      } else if (fs.existsSync(DB_FILE_TMP)) {
+        raw = fs.readFileSync(DB_FILE_TMP, "utf-8");
+      }
+      if (raw) {
         const data = JSON.parse(raw);
         if (data.products && Array.isArray(data.products)) this.products = data.products;
         if (data.categories && Array.isArray(data.categories)) this.categories = data.categories;
@@ -1080,7 +1090,7 @@ var DataStore = class {
         if (data.notifications && Array.isArray(data.notifications)) this.notifications = data.notifications;
       }
     } catch (err) {
-      console.error("Failed to load DB from disk:", err);
+      console.warn("DB disk load unavailable (expected in serverless):", err.message);
     }
   }
   // --- PRODUCTS ---
@@ -1828,7 +1838,7 @@ import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import path2 from "path";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 var serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
@@ -1849,9 +1859,14 @@ if (!serviceAccount) {
       process.cwd(),
       "velora-store-5f44c-firebase-adminsdk-fbsvc-1ad61a2d7b.json"
     );
-    serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf8"));
+    if (existsSync(serviceAccountPath)) {
+      serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf8"));
+    } else {
+      console.warn("\u26A0\uFE0F Firebase service account file not found at", serviceAccountPath);
+      console.warn("\u26A0\uFE0F Set FIREBASE_SERVICE_ACCOUNT environment variable for production.");
+    }
   } catch (err) {
-    console.error("\u274C Failed to load Firebase service account key from file:", err);
+    console.warn("\u26A0\uFE0F Firebase service account file not available (expected in serverless):", err.message);
   }
 }
 if (getApps().length === 0 && serviceAccount) {

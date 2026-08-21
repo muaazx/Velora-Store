@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "functions": {
+    "api/index.js": {
+      "runtime": "@vercel/node@latest",
+      "includeFiles": "node_modules/.prisma/**"
+    }
+  },
   "buildCommand": "prisma generate && vite build && esbuild src/server/serverless.ts --bundle --platform=node --format=esm --packages=external --outfile=api/index.js",
   "outputDirectory": "dist",
   "rewrites": [

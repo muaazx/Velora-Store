@@ -31,6 +31,8 @@ import fs from 'fs';
 import path from 'path';
 
 const DB_FILE = path.resolve(process.cwd(), 'db_storage.json');
+// Serverless environments (Vercel) have read-only filesystems except /tmp
+const DB_FILE_TMP = path.resolve('/tmp', 'db_storage.json');
 
 class DataStore {
   private products: Product[] = [...INITIAL_PRODUCTS];
@@ -85,16 +87,28 @@ class DataStore {
         settings: this.settings,
         notifications: this.notifications,
       };
-      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      // Try primary location first, fallback to /tmp for serverless
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      } catch {
+        fs.writeFileSync(DB_FILE_TMP, JSON.stringify(data, null, 2), 'utf-8');
+      }
     } catch (err) {
-      console.error('Failed to save DB to disk:', err);
+      // Silently ignore in serverless environments — data lives in memory
+      console.warn('DB disk persistence unavailable (expected in serverless):', (err as Error).message);
     }
   }
 
   private loadFromDisk() {
     try {
+      // Try primary location first, then /tmp fallback
+      let raw: string | null = null;
       if (fs.existsSync(DB_FILE)) {
-        const raw = fs.readFileSync(DB_FILE, 'utf-8');
+        raw = fs.readFileSync(DB_FILE, 'utf-8');
+      } else if (fs.existsSync(DB_FILE_TMP)) {
+        raw = fs.readFileSync(DB_FILE_TMP, 'utf-8');
+      }
+      if (raw) {
         const data = JSON.parse(raw);
         if (data.products && Array.isArray(data.products)) this.products = data.products;
         if (data.categories && Array.isArray(data.categories)) this.categories = data.categories;
@@ -107,7 +121,8 @@ class DataStore {
         if (data.notifications && Array.isArray(data.notifications)) this.notifications = data.notifications;
       }
     } catch (err) {
-      console.error('Failed to load DB from disk:', err);
+      // Silently ignore — will use seeded in-memory data
+      console.warn('DB disk load unavailable (expected in serverless):', (err as Error).message);
     }
   }
 

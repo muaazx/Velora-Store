@@ -2,7 +2,7 @@ import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import path from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 
 // Load the service account credentials from Environment Variable (Vercel production) or local JSON file (dev)
 let serviceAccount: any;
@@ -28,9 +28,15 @@ if (!serviceAccount) {
       process.cwd(),
       'velora-store-5f44c-firebase-adminsdk-fbsvc-1ad61a2d7b.json'
     );
-    serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
+    // Only attempt to read if the file exists (avoids crash in serverless)
+    if (existsSync(serviceAccountPath)) {
+      serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
+    } else {
+      console.warn('⚠️ Firebase service account file not found at', serviceAccountPath);
+      console.warn('⚠️ Set FIREBASE_SERVICE_ACCOUNT environment variable for production.');
+    }
   } catch (err) {
-    console.error('❌ Failed to load Firebase service account key from file:', err);
+    console.warn('⚠️ Firebase service account file not available (expected in serverless):', (err as Error).message);
   }
 }
 
