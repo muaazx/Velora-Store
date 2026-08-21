@@ -1,0 +1,15 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Firebase service account key (NEVER commit)
+velora-store-5f44c-firebase-adminsdk-*.json
+*-firebase-adminsdk-*.json
+
+# Local disk DB persistence
+db_storage.json

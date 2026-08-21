@@ -1,0 +1,368 @@
+// Prisma Schema for BazaarNova E-Commerce Platform
+// Compatible with PostgreSQL & Prisma ORM
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  PACKED
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  PAYPAL
+  PAYONEER
+  CREDIT_CARD
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum StockStatus {
+  IN_STOCK
+  LOW_STOCK
+  OUT_OF_STOCK
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum BannerType {
+  HERO_SLIDER
+  PROMOTIONAL
+  HOMEPAGE
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  ORDER
+  PROMOTIONAL
+  DISCOUNT
+  SYSTEM
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  avatar        String?
+  role          Role           @default(CUSTOMER)
+  isSuspended   Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  addresses     Address[]
+  orders        Order[]
+  cart          Cart?
+  wishlist      Wishlist?
+  reviews       Review[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Address {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String   @default("Home") // Home, Office, Other
+  fullName     String
+  phone        String
+  street       String
+  city         String
+  state        String
+  postalCode   String
+  country      String   @default("United States")
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+
+  @@map("addresses")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  icon        String?
+  bannerImage String?
+  featured    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id             String         @id @default(uuid())
+  name           String
+  slug           String         @unique
+  sku            String         @unique
+  description    String
+  price          Decimal        @db.Decimal(10, 2)
+  discount       Decimal        @default(0) @db.Decimal(5, 2) // Percentage discount
+  quantity       Int            @default(0)
+  stockStatus    StockStatus    @default(IN_STOCK)
+  brand          String
+  thumbnail      String
+  images         String[]       // Array of image URLs
+  featured       Boolean        @default(false)
+  isFlashSale    Boolean        @default(false)
+  flashSalePrice Decimal?       @db.Decimal(10, 2)
+  specifications Json?          // Key-value specifications
+  rating         Decimal        @default(0) @db.Decimal(2, 1)
+  reviewCount    Int            @default(0)
+  soldCount      Int            @default(0)
+  isArchived     Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  categoryId     String
+  category       Category       @relation(fields: [categoryId], references: [id])
+  orderItems     OrderItem[]
+  cartItems      CartItem[]
+  wishlistItems  WishlistItem[]
+  reviews        Review[]
+
+  @@map("products")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  items     CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Wishlist {
+  id        String         @id @default(uuid())
+  userId    String         @unique
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  items     WishlistItem[]
+
+  @@map("wishlists")
+}
+
+model WishlistItem {
+  id         String   @id @default(uuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([wishlistId, productId])
+  @@map("wishlist_items")
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  orderNumber   String        @unique
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  addressId     String
+  address       Address       @relation(fields: [addressId], references: [id])
+  
+  subtotal      Decimal       @db.Decimal(10, 2)
+  shippingFee   Decimal       @default(0) @db.Decimal(10, 2)
+  discount      Decimal       @default(0) @db.Decimal(10, 2)
+  tax           Decimal       @default(0) @db.Decimal(10, 2)
+  totalAmount   Decimal       @db.Decimal(10, 2)
+  
+  status        OrderStatus   @default(PENDING)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+  trackingCode  String?
+  customerNotes String?
+
+  couponId      String?
+  coupon        Coupon?       @relation(fields: [couponId], references: [id])
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items         OrderItem[]
+  payments      Payment[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int      @default(1)
+  discount  Decimal  @default(0) @db.Decimal(5, 2)
+  total     Decimal  @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+
+  @@map("order_items")
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount        Decimal       @db.Decimal(10, 2)
+  currency      String        @default("USD")
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  transactionId String?
+  gatewayData   Json?
+  createdAt     DateTime      @default(now())
+
+  @@map("payments")
+}
+
+model Coupon {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  discountType DiscountType @default(PERCENTAGE)
+  value       Decimal      @db.Decimal(10, 2) // percentage (e.g. 15%) or fixed amount (e.g. $20)
+  minSpend    Decimal      @default(0) @db.Decimal(10, 2)
+  maxDiscount Decimal?     @db.Decimal(10, 2)
+  expiryDate  DateTime
+  usageLimit  Int          @default(100)
+  timesUsed   Int          @default(0)
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  orders      Order[]
+
+  @@map("coupons")
+}
+
+model Review {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  rating    Int          // 1 to 5
+  title     String
+  comment   String
+  images    String[]
+  status    ReviewStatus @default(APPROVED) // or PENDING for moderation
+  verifiedPurchase Boolean @default(true)
+  
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@map("reviews")
+}
+
+model Banner {
+  id          String     @id @default(uuid())
+  title       String
+  subtitle    String?
+  linkUrl     String?
+  imageUrl    String
+  type        BannerType @default(HERO_SLIDER)
+  order       Int        @default(0)
+  isActive    Boolean    @default(true)
+  bgColor     String?    @default("#f97316")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("banners")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String?          // null = broadcast to all users
+  user      User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      NotificationType @default(PROMOTIONAL)
+  isRead    Boolean          @default(false)
+  linkUrl   String?
+  createdAt DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+model Setting {
+  id                 String   @id @default("global_settings")
+  siteName           String   @default("BazaarNova")
+  logoUrl            String?
+  contactEmail       String   @default("support@bazaarnova.com")
+  contactPhone       String   @default("+1 (800) 555-NOVA")
+  address            String   @default("742 Evergreen Terrace, Silicon Valley, CA")
+  shippingCharge     Decimal  @default(4.99) @db.Decimal(10, 2)
+  freeShippingAbove  Decimal  @default(49.00) @db.Decimal(10, 2)
+  taxPercentage      Decimal  @default(8.5) @db.Decimal(5, 2)
+  socialFacebook     String   @default("https://facebook.com/bazaarnova")
+  socialTwitter      String   @default("https://twitter.com/bazaarnova")
+  socialInstagram    String   @default("https://instagram.com/bazaarnova")
+  updatedAt          DateTime @updatedAt
+
+  @@map("settings")
+}

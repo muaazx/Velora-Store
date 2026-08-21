@@ -1,0 +1,6 @@
+{
+  "name": "BazaarNova - Modern Multi-Role E-Commerce",
+  "description": "A high-performance Daraz-inspired e-commerce platform with customer shopping portal, flash sales, mega menus, order tracking, address book, reviews, and a comprehensive SaaS admin dashboard with analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
