@@ -392,7 +392,7 @@ export const OrderDetailView: React.FC = () => {
             <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
               <div>
                 <h2 className="text-xl font-black text-zinc-900 dark:text-white">
-                  Bazaar<span className="text-orange-500">Nova</span> Invoice
+                  Velora<span className="text-orange-500">Store</span> Invoice
                 </h2>
                 <p className="text-zinc-400 text-[11px]">Official Tax Receipt & Packing Slip</p>
               </div>

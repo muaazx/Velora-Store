@@ -195,7 +195,7 @@ export const Header: React.FC = () => {
               </div>
               <div>
                 <span className="text-xl font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-0.5">
-                  Bazaar<span className="text-[#F85606]">Nova</span>
+                  Velora<span className="text-[#F85606]">Store</span>
                 </span>
                 <span className="text-[10px] font-semibold text-zinc-400 tracking-wider uppercase block -mt-1">
                   Super Marketplace
