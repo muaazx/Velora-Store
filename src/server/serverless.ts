@@ -28,9 +28,13 @@ app.use('/api', apiRouter);
 app.use('/', apiRouter);
 
 // Global error handler
-app.use((err: any, _req: Request, res: Response, _next: any) => {
-  console.error('API Error:', err);
-  res.status(500).json({ error: err?.message || 'Internal Server Error' });
+app.use((err: any, req: Request, res: Response, next: any) => {
+  console.error('Serverless Error Stack:', err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err?.message || String(err),
+    stack: err?.stack || undefined
+  });
 });
 
 export default app;

@@ -29,6 +29,16 @@ async function startServer() {
     res.json({ status: 'ok', name: 'BazaarNova API', timestamp: new Date().toISOString() });
   });
 
+  // Global error handler
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('Server Error Stack:', err);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: err?.message || String(err),
+      stack: err?.stack || undefined
+    });
+  });
+
   // Vite middleware for development vs static dist for production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

@@ -2434,9 +2434,13 @@ app.get(["/health", "/api/health"], (_req, res) => {
 });
 app.use("/api", apiRouter);
 app.use("/", apiRouter);
-app.use((err, _req, res, _next) => {
-  console.error("API Error:", err);
-  res.status(500).json({ error: err?.message || "Internal Server Error" });
+app.use((err, req, res, next) => {
+  console.error("Serverless Error Stack:", err);
+  res.status(500).json({
+    error: "Internal Server Error",
+    message: err?.message || String(err),
+    stack: err?.stack || void 0
+  });
 });
 var serverless_default = app;
 export {
