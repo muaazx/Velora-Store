@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 // Health check endpoint
 app.get(['/health', '/api/health'], (_req: Request, res: Response) => {
-  res.json({ status: 'ok', name: 'BazaarNova API', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', name: 'Velora Store API', timestamp: new Date().toISOString() });
 });
 
 // Mount router on both /api and / so it works seamlessly with all Vercel URL rewrites

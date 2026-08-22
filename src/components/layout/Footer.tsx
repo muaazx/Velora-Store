@@ -61,11 +61,11 @@ export const Footer: React.FC = () => {
               <ShoppingBag className="w-4 h-4" />
             </div>
             <span className="text-lg font-black tracking-tight text-white">
-              Bazaar<span className="text-orange-500">Nova</span>
+              Velora<span className="text-orange-500">Store</span>
             </span>
           </div>
           <p className="text-zinc-400 leading-relaxed text-xs max-w-sm">
-            BazaarNova is a next-generation premier e-commerce marketplace delivering authentic consumer tech, fashion, lifestyle goods, and gourmet essentials with rapid dispatch and guaranteed buyer protection.
+            Velora Store is a next-generation premier e-commerce marketplace delivering authentic consumer tech, fashion, lifestyle goods, and gourmet essentials with rapid dispatch and guaranteed buyer protection.
           </p>
           <div className="space-y-2 text-xs text-zinc-400">
             <div className="flex items-center gap-2">
@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-orange-500 shrink-0" />
-              <span>{settings?.contactEmail || 'support@bazaarnova.com'}</span>
+              <span>{settings?.contactEmail || 'support@velorastore.com'}</span>
             </div>
           </div>
         </div>
@@ -87,11 +87,6 @@ export const Footer: React.FC = () => {
         <div>
           <h4 className="font-bold text-white mb-3 text-sm">Customer Care</h4>
           <ul className="space-y-2 text-xs text-zinc-400">
-            <li>
-              <button onClick={() => setActiveView('orders')} className="hover:text-orange-400 transition-colors">
-                Track My Order
-              </button>
-            </li>
             <li>
               <button onClick={() => setActiveView('catalog')} className="hover:text-orange-400 transition-colors">
                 Browse Products
@@ -179,7 +174,7 @@ export const Footer: React.FC = () => {
       {/* Bottom Bar */}
       <div className="border-t border-zinc-800 py-4 text-center text-zinc-500 text-[11px]">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p>© 2025 BazaarNova Marketplace Inc. All rights reserved.</p>
+          <p>© 2025 Velora Store Inc. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="hover:underline cursor-pointer">Privacy Policy</span>
             <span className="hover:underline cursor-pointer">Terms of Service</span>

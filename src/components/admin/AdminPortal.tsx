@@ -80,11 +80,11 @@ export const AdminPortal: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center text-white font-black text-sm">
-              BN
+              VS
             </div>
             <div>
               <span className="font-black text-sm text-zinc-900 dark:text-white tracking-tight">
-                BazaarNova <span className="text-orange-500 font-bold">Admin Console</span>
+                Velora Store <span className="text-orange-500 font-bold">Admin Console</span>
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded font-semibold">
                 v2.4 Production

@@ -64,10 +64,10 @@ export const AuthModal: React.FC = () => {
               <div className="p-2 bg-white/25 rounded-lg">
                 <ShoppingBag className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold tracking-tight text-lg">BazaarNova</span>
+              <span className="font-bold tracking-tight text-lg">Velora Store</span>
             </div>
             <h2 className="text-xl font-bold">
-              {authModalTab === 'login' && 'Welcome Back to BazaarNova'}
+              {authModalTab === 'login' && 'Welcome Back to Velora Store'}
               {authModalTab === 'register' && 'Create Your Customer Account'}
               {authModalTab === 'forgot' && 'Reset Your Password'}
             </h2>

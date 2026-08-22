@@ -23,7 +23,7 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 
 // Health check endpoints
 app.get(['/health', '/api/health'], (_req: Request, res: Response) => {
-  res.json({ status: 'ok', name: 'BazaarNova API', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', name: 'Velora Store API', timestamp: new Date().toISOString() });
 });
 
 // API Routes
@@ -40,7 +40,7 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 app.listen(Number(PORT), '0.0.0.0', () => {
-  console.log(`🚀 BazaarNova Server running on port ${PORT}`);
+  console.log(`🚀 Velora Store Server running on port ${PORT}`);
 });
 
 export default app;

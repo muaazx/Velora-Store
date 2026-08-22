@@ -1,4 +1,4 @@
-// Prisma Schema for BazaarNova E-Commerce Platform
+// Prisma Schema for Velora Store E-Commerce Platform
 // Compatible with PostgreSQL & Prisma ORM
 
 datasource db {
@@ -351,17 +351,17 @@ model Notification {
 
 model Setting {
   id                 String   @id @default("global_settings")
-  siteName           String   @default("BazaarNova")
+  siteName           String   @default("Velora Store")
   logoUrl            String?
-  contactEmail       String   @default("support@bazaarnova.com")
+  contactEmail       String   @default("support@velorastore.com")
   contactPhone       String   @default("+1 (800) 555-NOVA")
   address            String   @default("742 Evergreen Terrace, Silicon Valley, CA")
   shippingCharge     Decimal  @default(4.99) @db.Decimal(10, 2)
   freeShippingAbove  Decimal  @default(49.00) @db.Decimal(10, 2)
   taxPercentage      Decimal  @default(8.5) @db.Decimal(5, 2)
-  socialFacebook     String   @default("https://facebook.com/bazaarnova")
-  socialTwitter      String   @default("https://twitter.com/bazaarnova")
-  socialInstagram    String   @default("https://instagram.com/bazaarnova")
+  socialFacebook     String   @default("https://facebook.com/velorastore")
+  socialTwitter      String   @default("https://twitter.com/velorastore")
+  socialInstagram    String   @default("https://instagram.com/velorastore")
   updatedAt          DateTime @updatedAt
 
   @@map("settings")

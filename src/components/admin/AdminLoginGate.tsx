@@ -54,7 +54,7 @@ export const AdminLoginGate: React.FC = () => {
             </h1>
             <p className="text-sm text-zinc-400 mt-2 leading-relaxed">
               Sign in with your authorized Google account<br />
-              to access the BazaarNova management dashboard.
+              to access the Velora Store management dashboard.
             </p>
           </div>
 
@@ -101,7 +101,7 @@ export const AdminLoginGate: React.FC = () => {
                 className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors group"
               >
                 <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-                Back to BazaarNova Store
+                Back to Velora Store
               </button>
             </div>
           </div>
@@ -109,7 +109,7 @@ export const AdminLoginGate: React.FC = () => {
 
         {/* Footer */}
         <p className="text-center text-[10px] text-zinc-600 mt-6">
-          Protected by Firebase Authentication • BazaarNova v2.4
+          Protected by Firebase Authentication • Velora Store v2.4
         </p>
       </motion.div>
     </div>

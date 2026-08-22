@@ -149,7 +149,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(res.user);
       setToken(res.token);
       localStorage.setItem('bn_token', res.token);
-      success('Account created!', `Welcome to BazaarNova, ${res.user.name}`);
+      success('Account created!', `Welcome to Velora Store, ${res.user.name}`);
       closeAuthModal();
       return true;
     } catch (err: any) {

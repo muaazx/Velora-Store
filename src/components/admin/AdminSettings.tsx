@@ -5,8 +5,8 @@ import { useToast } from '../../context/ToastContext';
 export const AdminSettings: React.FC = () => {
   const { success } = useToast();
 
-  const [storeName, setStoreName] = useState('BazaarNova');
-  const [supportEmail, setSupportEmail] = useState('support@bazaarnova.com');
+  const [storeName, setStoreName] = useState('Velora Store');
+  const [supportEmail, setSupportEmail] = useState('support@velorastore.com');
   const [supportPhone, setSupportPhone] = useState('+1 (800) 555-0199');
   const [currencySymbol, setCurrencySymbol] = useState('$');
   const [taxRate, setTaxRate] = useState(7.5);

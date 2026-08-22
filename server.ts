@@ -28,7 +28,7 @@ async function startServer() {
 
   // Health check
   app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', name: 'BazaarNova API', timestamp: new Date().toISOString() });
+    res.json({ status: 'ok', name: 'Velora Store API', timestamp: new Date().toISOString() });
   });
 
   // Global error handler
@@ -57,7 +57,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 BazaarNova Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🚀 Velora Store Server running on http://0.0.0.0:${PORT}`);
   });
 }
 

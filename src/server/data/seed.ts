@@ -1,9 +1,9 @@
 import { Category, Product, Banner, Coupon, User, Address, Order, Review, StoreSettings, NotificationItem } from '../../types';
 
 export const INITIAL_SETTINGS: StoreSettings = {
-  siteName: 'BazaarNova',
+  siteName: 'Velora Store',
   logoUrl: '',
-  contactEmail: 'support@bazaarnova.com',
+  contactEmail: 'support@velorastore.com',
   contactPhone: '+1 (800) 842-6272',
   address: '500 Innovation Way, Tech Hub Suite 400, San Francisco, CA 94105',
   shippingCharge: 4.99,
@@ -11,15 +11,15 @@ export const INITIAL_SETTINGS: StoreSettings = {
   taxPercentage: 7.5,
   currency: 'USD',
   currencySymbol: '$',
-  socialFacebook: 'https://facebook.com/bazaarnova',
-  socialTwitter: 'https://twitter.com/bazaarnova',
-  socialInstagram: 'https://instagram.com/bazaarnova',
+  socialFacebook: 'https://facebook.com/velorastore',
+  socialTwitter: 'https://twitter.com/velorastore',
+  socialInstagram: 'https://instagram.com/velorastore',
 };
 
 export const INITIAL_USERS: User[] = [
   {
     id: 'user-admin-1',
-    email: 'admin@bazaarnova.com',
+    email: 'admin@velorastore.com',
     name: 'Eleanor Vance (Admin)',
     phone: '+1 (415) 890-1200',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',

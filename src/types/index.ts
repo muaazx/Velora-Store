@@ -1,4 +1,4 @@
-// Shared TypeScript Types for BazaarNova Platform
+// Shared TypeScript Types for Velora Store Platform
 
 export type Role = 'CUSTOMER' | 'ADMIN' | 'SUPER_ADMIN';
 
